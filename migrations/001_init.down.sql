@@ -1,0 +1,2 @@
+DROP INDEX IF EXISTS idx_people_name;
+DROP TABLE IF EXISTS people;

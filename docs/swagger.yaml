@@ -1,0 +1,215 @@
+basePath: /
+definitions:
+  dto.ErrorResponse:
+    properties:
+      message:
+        example: error happened
+        type: string
+    type: object
+  dto.Response:
+    properties:
+      id:
+        example: 1
+        type: integer
+      message:
+        example: user added
+        type: string
+    type: object
+  dto.UserRequest:
+    properties:
+      name:
+        example: Dmitriy
+        type: string
+      patronymic:
+        example: Sergeevich
+        type: string
+      surname:
+        example: Ivanov
+        type: string
+    type: object
+  dto.UserResponse:
+    properties:
+      age:
+        example: 30
+        type: integer
+      gender:
+        example: male
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Dmitriy
+        type: string
+      nationality:
+        example: RU
+        type: string
+      patronymic:
+        example: Sergeevich
+        type: string
+      surname:
+        example: Ivanov
+        type: string
+    type: object
+host: localhost:7007
+info:
+  contact: {}
+  description: API для работы с данными о людях
+  title: Effective Mobile API
+  version: "1.0"
+paths:
+  /people:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список людей с поддержкой фильтрации по полям и пагинации
+      parameters:
+      - description: ID пользователя
+        in: query
+        name: id
+        type: integer
+      - description: Имя
+        in: query
+        name: name
+        type: string
+      - description: Фамилия
+        in: query
+        name: surname
+        type: string
+      - description: Отчество
+        in: query
+        name: patronymic
+        type: string
+      - description: Возраст
+        in: query
+        name: age
+        type: integer
+      - description: Пол
+        in: query
+        name: gender
+        type: string
+      - description: Национальность
+        in: query
+        name: nationality
+        type: string
+      - description: Максимальное количество записей
+        in: query
+        name: limit
+        type: integer
+      - description: Смещение (offset) для пагинации
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.UserResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Получить список людей
+      tags:
+      - people
+    post:
+      consumes:
+      - application/json
+      description: Создаёт нового пользователя и возвращает его ID
+      parameters:
+      - description: Информация о пользователе
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Добавить нового пользователя
+      tags:
+      - people
+  /people/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет пользователя по ID
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Удалить пользователя
+      tags:
+      - people
+    put:
+      consumes:
+      - application/json
+      description: Обновляет данные пользователя по ID
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Обновлённая информация о пользователе
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Обновить пользователя
+      tags:
+      - people
+swagger: "2.0"
